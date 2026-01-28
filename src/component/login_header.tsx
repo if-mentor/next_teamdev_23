@@ -1,6 +1,6 @@
 import styles from '@/component/login_header.module.css';
 
-function loginHeader() {
+function LoginHeader() {
   return (
     <header className={styles.loginHeader}>
       <ul>
@@ -12,4 +12,4 @@ function loginHeader() {
   );
 }
 
-export default loginHeader;
+export default LoginHeader;
