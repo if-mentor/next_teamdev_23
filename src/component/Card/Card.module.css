@@ -33,8 +33,12 @@
   height: 1px;
   background-color: #999;
 }
-.imagePlaceholder::before { transform: rotate(30deg); }
-.imagePlaceholder::after { transform: rotate(-30deg); }
+.imagePlaceholder::before {
+  transform: rotate(30deg);
+}
+.imagePlaceholder::after {
+  transform: rotate(-30deg);
+}
 
 .content {
   padding: 12px;
