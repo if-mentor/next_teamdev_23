@@ -1,4 +1,4 @@
-import styles from '@/component/login_header.module.css';
+import styles from "@/component/login_header.module.css";
 
 function LoginHeader() {
   return (
@@ -7,7 +7,6 @@ function LoginHeader() {
         <button className={styles.loginButton}>ログイン</button>
         <button className={styles.signUpButton}>新規登録</button>
       </ul>
-
     </header>
   );
 }
