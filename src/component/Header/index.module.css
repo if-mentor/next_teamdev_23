@@ -1,0 +1,26 @@
+.header {
+  width: 100%;
+  height: 72px;
+  margin: 0 auto;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 24px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.button {
+  padding: 8px 16px;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #333333;
+}
+
+.buttonPrimary {
+  background-color: #333333;
+  color: #ffffff;
+}
