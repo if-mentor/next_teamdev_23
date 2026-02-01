@@ -2,25 +2,25 @@ import styles from "./index.module.css";
 import { useState } from "react";
 
 function CommentForm() {
-  const[comment, setComment] = useState("");
+  const [comment, setComment] = useState("");
 
   // コメントボタンを押した時の処理
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // フォームのデフォルトの送信動作を防ぐ
-    if(!comment.trim()) return; // trimを適用した上で、コメントが空の場合は送信しない
+    if (!comment.trim()) return; // trimを適用した上で、コメントが空の場合は送信しない
     console.log("コメント送信:", comment);
-    setComment(""); 
-  }
+    setComment("");
+  };
 
   return (
     <form className={styles.CommentForm} onSubmit={handleSubmit}>
-      <textarea 
-        className={styles.input} 
+      <textarea
+        className={styles.input}
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="コメントを入力" 
+        placeholder="コメントを入力"
       />
-      <button className={styles.CommentFormButton} type="submit" >
+      <button className={styles.CommentFormButton} type="submit">
         コメント
       </button>
     </form>
