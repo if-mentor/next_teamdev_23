@@ -1,7 +1,6 @@
 import styles from "./style.module.css";
 import type { CommentCardProps } from "./type";
 
-
 const CommentCard = ({ username, timeAgo, content }: CommentCardProps) => {
   return (
     <div className={styles.card}>
