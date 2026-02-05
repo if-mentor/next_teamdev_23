@@ -2,7 +2,6 @@ import styles from "./index.module.css";
 
 type Props = {
   title: string;
-  category?: string;
   imageUrl?: string;
   content: string;
   authorIconUrl?: string;
@@ -16,12 +15,9 @@ const BlogCard = ({ title, imageUrl, content, authorIconUrl }: Props) => {
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.authorIcon}>
           {authorIconUrl ? (
+            // Imageタグを使うべきだが、next.config.jsの設定回避のため一時的にimgタグを使用
             /* eslint-disable-next-line @next/next/no-img-element */
-            <img 
-              src={authorIconUrl} 
-              alt="Author" 
-              className={styles.iconImage}
-            />
+            <img src={authorIconUrl} alt="Author" className={styles.iconImage} />
           ) : (
             <span className={styles.defaultIcon}>👤</span>
           )}
@@ -31,12 +27,9 @@ const BlogCard = ({ title, imageUrl, content, authorIconUrl }: Props) => {
       {/* 画像エリア */}
       <div className={styles.imageArea}>
         {imageUrl ? (
+          // Imageタグを使うべきだが、next.config.jsの設定回避のため一時的にimgタグを使用
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img 
-            src={imageUrl} 
-            alt={title} 
-            className={styles.image} 
-          />
+          <img src={imageUrl} alt={title} className={styles.image} />
         ) : (
           <div className={styles.noImage}></div>
         )}
