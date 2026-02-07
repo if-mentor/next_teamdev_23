@@ -1,4 +1,4 @@
-import LoginHeader from "@/component/login_header";
+import LoginHeader from "@/component/LoginHeader";
 import styles from "./login.module.css";
 
 export default function Login() {
