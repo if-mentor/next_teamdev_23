@@ -40,7 +40,8 @@ const dummyComments = [
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  console.log("現在の記事ID:", id);
+  // 開発完了のためコメントアウト
+  //console.log("現在の記事ID:", id);
 
   return (
     <main className={styles.main}>
