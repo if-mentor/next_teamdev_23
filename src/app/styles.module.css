@@ -1,6 +1,24 @@
-.title {
-  height: 100vh;
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.searchArea {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  justify-items: center;
+  margin-bottom: 60px;
+}
+
+.paginationArea {
+  display: flex;
+  justify-content: center;
 }
