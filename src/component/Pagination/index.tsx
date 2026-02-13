@@ -34,9 +34,7 @@ export default function Pagination() {
           <li key={page}>
             <button
               onClick={() => setCurrentPage(page)}
-              className={`${styles.pageButton} ${
-                page === currentPage ? styles.active : ""
-              }`}
+              className={`${styles.pageButton} ${page === currentPage ? styles.active : ""}`}
             >
               {page}
             </button>
