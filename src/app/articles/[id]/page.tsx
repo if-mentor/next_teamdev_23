@@ -38,7 +38,7 @@ const dummyComments = [
 ];
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
-// 開発完了のためコメントアウト
+  // 開発完了のためコメントアウト
   // const { id } = await params;
   // console.log("現在の記事ID:", id);
 
