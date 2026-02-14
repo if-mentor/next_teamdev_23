@@ -1,5 +1,4 @@
 .main {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -12,9 +11,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, max-content);
   gap: 32px;
-  justify-items: center;
+  justify-content: center;
   margin-bottom: 60px;
 }
 
