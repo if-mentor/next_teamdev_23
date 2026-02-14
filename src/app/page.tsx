@@ -1,6 +1,5 @@
 import styles from "./styles.module.css";
 
-import Header from "@/component/Header";
 import SearchBar from "@/component/SearchBar";
 import Card from "@/component/Card";
 import Pagination from "@/component/Pagination";
@@ -8,8 +7,6 @@ import Pagination from "@/component/Pagination";
 export default function Home() {
   return (
     <>
-      <Header />
-
       <main className={styles.main}>
         <div className={styles.searchArea}>
           <SearchBar />
