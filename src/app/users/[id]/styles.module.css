@@ -1,0 +1,16 @@
+.title{
+  display: flex;
+  justify-content: center;
+  margin:48px auto;
+  font-size: 32px;
+  color:#6B6B6B
+}
+
+.cardGrid{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:space-between;
+  margin: 48px 64px 32px 64px;
+  gap:24px;
+}
