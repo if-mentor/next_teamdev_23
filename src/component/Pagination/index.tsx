@@ -3,8 +3,14 @@
 import { useState } from "react";
 import styles from "./Pagination.module.css";
 
-export default function Pagination() {
-  const totalPages = 10;
+type PaginationProps = {
+  postCount: number;
+  perPage?: number;
+};
+
+export default function Pagination({ postCount, perPage = 8 }: PaginationProps) {
+  const totalPages = Math.ceil(postCount / perPage);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
