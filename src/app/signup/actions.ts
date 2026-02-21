@@ -24,7 +24,7 @@ export async function signup(formData: FormData) {
   // 3. バリデーション（簡易チェック）
   if (!name || !email || !password) {
     console.error("入力内容が不足しています");
-    return;
+    return { error: 'すべての項目を入力してください' }
   }
 
   // 4. Supabase Authにサインアップ
@@ -40,7 +40,7 @@ export async function signup(formData: FormData) {
 
   if (authError) {
     console.error("認証エラー:", authError.message);
-    return;
+    return { error: authError.message }
   }
 
   // 5. usersテーブルへの登録
@@ -56,11 +56,9 @@ export async function signup(formData: FormData) {
 
     if (dbError) {
       console.error("DB登録エラー:", dbError.message);
-      return;
+      return { error: 'ユーザー情報の保存に失敗しました' }
     }
   }
-
-  console.log("登録成功！:", authData.user?.email);
 
   // 登録完了後のリダイレクト
   redirect("/login");
