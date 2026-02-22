@@ -1,10 +1,8 @@
-import LoginHeader from "@/component/LoginHeader";
 import styles from "./login.module.css";
 
 export default function Login() {
   return (
     <>
-      <LoginHeader />
       <div className={styles.login}>
         <h1 className={styles.title}>ログイン</h1>
         <form className={styles.loginForm}>
