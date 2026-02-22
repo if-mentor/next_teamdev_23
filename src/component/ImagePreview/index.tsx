@@ -65,38 +65,22 @@ const ImagePreview = () => {
   return (
     <div className={styles.wrapper}>
       <div
-        className={`${styles.uploadArea} ${
-          isDragging ? styles.dragging : ""
-        }`}
+        className={`${styles.uploadArea} ${isDragging ? styles.dragging : ""}`}
         onClick={handleUploadClick}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {previewUrl ? (
-          <Image
-            src={previewUrl}
-            alt="preview"
-            fill
-            className={styles.previewImage}
-            style={{ objectFit: "cover" }}
-          />
+          <Image src={previewUrl} alt="preview" fill className={styles.previewImage} style={{ objectFit: "cover" }} />
         ) : (
           <>
             <div className={styles.arrow}>↑</div>
-            <label className={styles.uploadButton}>
-              画像アップロード
-            </label>
+            <label className={styles.uploadButton}>画像アップロード</label>
           </>
         )}
 
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          hidden
-        />
+        <input ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} hidden />
       </div>
     </div>
   );
