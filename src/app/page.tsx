@@ -9,10 +9,7 @@ import { createClient } from "@/libs/supabase/server";
 export default async function Home() {
   const supabase = await createClient();
 
-  const { data: posts, error } = await supabase
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const { data: posts, error } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching posts:", error);
@@ -31,7 +28,7 @@ export default async function Home() {
             <Card
               key={post.id}
               title={post.title}
-              category="Category" 
+              category="Category"
               author="Author Name"
               timeAgo={new Date(post.created_at).toLocaleString()}
             />
