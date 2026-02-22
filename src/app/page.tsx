@@ -4,7 +4,21 @@ import SearchBar from "@/component/SearchBar";
 import Card from "@/component/Card";
 import Pagination from "@/component/Pagination";
 
-export default function Home() {
+import { createClient } from "@/libs/supabase/server";
+
+export default async function Home() {
+  const supabase = await createClient();
+
+  const { data: posts, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching posts:", error);
+    return <div>データの取得に失敗しました</div>;
+  }
+
   return (
     <>
       <main className={styles.main}>
@@ -13,13 +27,13 @@ export default function Home() {
         </div>
 
         <section className={styles.grid}>
-          {Array.from({ length: 8 }).map((_, index) => (
+          {posts?.map((post) => (
             <Card
-              key={index}
-              title={`Post Title ${index + 1}`}
-              category="Category"
+              key={post.id}
+              title={post.title}
+              category="Category" 
               author="Author Name"
-              timeAgo="3 min ago"
+              timeAgo={new Date(post.created_at).toLocaleString()}
             />
           ))}
         </section>
