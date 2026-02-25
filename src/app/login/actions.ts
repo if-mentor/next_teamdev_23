@@ -3,7 +3,11 @@
 import { createClient } from "@/libs/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function login(formData: FormData) {
+export type ActionState = {
+  message: string;
+};
+
+export async function login(prevState: ActionState | null, formData: FormData) {
   const supabase = await createClient();
 
   // フォームから入力値を取得
@@ -17,8 +21,11 @@ export async function login(formData: FormData) {
   });
 
   if (error) {
-    // 認証失敗時はエラーパラメータを付与してログイン画面へリダイレクト
-    redirect("/login?error=auth-failed");
+    if (error.code === "invalid_credentials") {
+      return { message: "メールアドレスとパスワードをご確認ください。" };
+    } else {
+      return { message: "予期しないエラーが発生しました" };
+    }
   }
 
   // 認証成功時はトップページへ
