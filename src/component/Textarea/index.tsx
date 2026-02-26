@@ -6,11 +6,21 @@ type Props = {
 };
 
 export default function Textarea(props: Props) {
+  const id = "textarea";
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.label}>{props.label}</div>
+      {props.label && (
+        <label htmlFor={id} className={styles.label}>
+          {props.label}
+        </label>
+      )}
 
-      <textarea className={styles.textarea} placeholder={props.placeholder} />
+      <textarea
+        id={id}
+        className={styles.textarea}
+        placeholder={props.placeholder}
+      />
     </div>
   );
 }
