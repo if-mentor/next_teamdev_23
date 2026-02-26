@@ -14,11 +14,7 @@ export default function Textarea(props: Props) {
         </label>
       )}
 
-      <textarea
-        id="content"
-        className={styles.textarea}
-        placeholder={props.placeholder}
-      />
+      <textarea id="content" className={styles.textarea} placeholder={props.placeholder} />
     </div>
   );
 }
