@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import styles from "./styles.module.css";
 import SearchBar from "@/component/SearchBar";
 import Card from "@/component/Card";
