@@ -3,31 +3,29 @@
 import { createClient } from "@/libs/supabase/server";
 import { redirect } from "next/navigation";
 
-/**
- * MEMO:
- * 現在はAPI実装のみのタスクのため、
- * エラーや成功時のメッセージは一時的にコンソールに出力しています。
- * 画面側へのフィードバック（バリデーションエラー表示など）は、
- * 今後のタスクで実装をお願いします。
- */
+export interface SignupState {
+  error: string;
+}
 
-export async function signup(formData: FormData) {
-  // 1. Supabaseクライアントの作成
+export async function signup(prevState: SignupState, formData: FormData): Promise<SignupState> {
   const supabase = await createClient();
 
-  // 2. フォームから値を取得
   const name = formData.get("name") as string;
-  //　空白を消去、大文字を小文字に統一
-  const email = (formData.get("email") as string)?.trim().toLowerCase();
+  const email = String(formData.get("email") || "")
+    .trim()
+    .toLowerCase();
   const password = formData.get("password") as string;
 
-  // 3. バリデーション（簡易チェック）
+  // 1. 空欄チェック
   if (!name || !email || !password) {
-    console.error("入力内容が不足しています");
-    return { error: 'すべての項目を入力してください' }
+    return { error: "すべての項目を入力してください" };
   }
 
-  // 4. Supabase Authにサインアップ
+  // 2. パスワードの文字数チェック（8文字以上か判定）
+  if (password.length < 8) {
+    return { error: "パスワードは8文字以上で入力してください" };
+  }
+
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -38,13 +36,21 @@ export async function signup(formData: FormData) {
     },
   });
 
+  // 3. Supabaseからのエラーを日本語に翻訳
   if (authError) {
     console.error("認証エラー:", authError.message);
-    return { error: authError.message }
+
+    // エラーメッセージの翻訳
+    let errorMessage = "登録に失敗しました。もう一度お試しください。";
+    if (authError.message.includes("User already registered")) {
+      errorMessage = "このメールアドレスはすでに登録されています";
+    } else if (authError.message.includes("Invalid email")) {
+      errorMessage = "有効なメールアドレスを入力してください";
+    }
+
+    return { error: errorMessage };
   }
 
-  // 5. usersテーブルへの登録
-  // ※Auth登録成功、かつユーザーIDが発行されていたら実行
   if (authData.user) {
     const { error: dbError } = await supabase.from("users").insert([
       {
@@ -56,10 +62,9 @@ export async function signup(formData: FormData) {
 
     if (dbError) {
       console.error("DB登録エラー:", dbError.message);
-      return { error: 'ユーザー情報の保存に失敗しました' }
+      return { error: "ユーザー情報の保存に失敗しました" };
     }
   }
 
-  // 登録完了後のリダイレクト
   redirect("/login");
 }
