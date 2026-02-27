@@ -6,11 +6,17 @@ import { createClient } from "@/libs/supabase/server";
 
 const PAGE_SIZE = 8;
 
-export default async function Home(props: { searchParams?: Promise<{ page?: string }> }) {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const supabase = await createClient();
 
-  const resolvedSearchParams = await props.searchParams;
-  const currentPage = Number(resolvedSearchParams?.page ?? "1");
+  const { page } = await searchParams;
+
+  const parsedPage = Number(page);
+  const currentPage = isNaN(parsedPage) ? 1 : Math.max(1, parsedPage);
 
   const from = (currentPage - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
