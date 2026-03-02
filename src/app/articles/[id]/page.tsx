@@ -3,6 +3,7 @@ import CommentForm from "@/component/CommentForm";
 import CommentCard from "@/component/CommentCard";
 import styles from "./page.module.css";
 
+
 // ダミー記事データ
 const dummyArticle = {
   title: "【衝撃】ライ麦は元々「小麦畑の雑草」だった！？驚きの出世ストーリー",
@@ -37,20 +38,36 @@ const dummyComments = [
   },
 ];
 
+import { createClient } from "@/libs/supabase/server";
+
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // 開発完了のためコメントアウト
-  // const { id } = await params;
-  // console.log("現在の記事ID:", id);
+  // URLから記事IDを取得
+  const { id } = await params;
+  const supabase = await createClient();
+  const numericId = Number(id);
+
+  // numericId(URLから取得した記事ID)を使って、Supabaseから記事データを取得
+  const { data: article } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", numericId)
+    .maybeSingle();
+
+  // 取得した記事データが存在すればそれを、存在しなければダミー記事をarticleToRenderに格納
+  // ダミーデータを削除してもいいかもしれませんが、Supabaseからのデータ取得に失敗した場合などに備え、現状は残しておくのが無難かと思いました。
+  // テーブルデータにauthorIconUrlがなかったため、ここでは省略。BlogCardのpropsを削除するか、テーブルデータにauthorIconUrlを追加するか要確認。
+  const articleToRender = article
+    ? { title: article.title, content: article.content, imageUrl: article.image_path }
+    : dummyArticle;
 
   return (
     <main className={styles.main}>
       {/* 1. 記事詳細エリア */}
       <section className={styles.section}>
         <BlogCard
-          title={dummyArticle.title}
-          content={dummyArticle.content}
-          imageUrl={dummyArticle.imageUrl}
-          authorIconUrl={dummyArticle.authorIconUrl}
+          title={articleToRender.title}
+          content={articleToRender.content}
+          imageUrl={articleToRender.imageUrl}
         />
       </section>
 
