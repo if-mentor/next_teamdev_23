@@ -14,7 +14,7 @@ export default function Signup() {
 
       <form className={styles.form} action={formAction}>
         {/* エラーメッセージを表示するエリア */}
-        {state?.error && (
+        {state.error && (
           <p style={{ color: "red", fontSize: "14px", marginBottom: "16px", textAlign: "center" }}>{state.error}</p>
         )}
 

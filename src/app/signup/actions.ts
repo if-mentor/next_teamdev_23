@@ -38,8 +38,6 @@ export async function signup(prevState: SignupState, formData: FormData): Promis
 
   // 3. Supabaseからのエラーを日本語に翻訳
   if (authError) {
-    console.error("認証エラー:", authError.message);
-
     // エラーメッセージの翻訳
     let errorMessage = "登録に失敗しました。もう一度お試しください。";
     if (authError.message.includes("User already registered")) {
@@ -61,10 +59,9 @@ export async function signup(prevState: SignupState, formData: FormData): Promis
     ]);
 
     if (dbError) {
-      console.error("DB登録エラー:", dbError.message);
       return { error: "ユーザー情報の保存に失敗しました" };
     }
   }
 
-  redirect("/login");
+  redirect("/");
 }
