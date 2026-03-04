@@ -2,23 +2,8 @@ import BlogCard from "@/component/BlogCard";
 import CommentForm from "@/component/CommentForm";
 import CommentCard from "@/component/CommentCard";
 import styles from "./page.module.css";
-
-
-// ダミー記事データ
-const dummyArticle = {
-  title: "【衝撃】ライ麦は元々「小麦畑の雑草」だった！？驚きの出世ストーリー",
-  content: `カフェやベーカリーでおなじみの「ライ麦パン」。 実はおしゃれな顔をしていますが、元々は「小麦畑に勝手に生えてくるお邪魔な雑草」だったことをご存知ですか？
-  
-■ 小麦のフリをして生き延びた「擬態」
-かつてライ麦は、小麦畑の雑草として農家に抜かれる運命にありました。 しかし、ここで驚きの進化を遂げます。なんと、人間に抜かれないよう、葉の形や背丈、種（粒）の大きさまで「小麦そっくり」に姿を変えたのです。 これを植物学で「ヴァヴィロフ型擬態」と呼びます。小麦に似た個体だけが生き残ることで、ライ麦は小麦の収穫物にちゃっかり紛れ込むことに成功しました。
-
-■ 寒さに負けた本家、生き残った雑草
-転機は、農業が寒い北ヨーロッパへ伝わった時です。 お坊ちゃん育ちの「小麦」は寒さに耐えられず枯れてしまいましたが、雑草出身の「ライ麦」はピンピンしていました。 これを見た人間が、「小麦は無理だけど、こいつなら食える！」と気づき、主食へと大抜擢。
-
-ドイツやロシアで黒パン（ライ麦パン）が愛されているのは、「寒すぎて小麦が育たなかったから、代わりに強かった元雑草を育てた」という歴史の名残なのです。`,
-  imageUrl: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1280&auto=format&fit=crop",
-  authorIconUrl: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100&auto=format&fit=crop",
-};
+import { notFound } from "next/navigation";
+import { createClient } from "@/libs/supabase/server";
 
 // ダミーコメントデータ
 const dummyComments = [
@@ -38,37 +23,31 @@ const dummyComments = [
   },
 ];
 
-import { createClient } from "@/libs/supabase/server";
-
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // URLから記事IDを取得
   const { id } = await params;
   const supabase = await createClient();
   const numericId = Number(id);
 
-  // numericId(URLから取得した記事ID)を使って、Supabaseから記事データを取得
-  const { data: article } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("id", numericId)
-    .maybeSingle();
+  //isNaN()関数を使って、numericIdが有効な数値かどうかをチェック。無効な場合はnotFound()を返す。
+  if (isNaN(numericId)) {
+    notFound();
+  }
 
-  // 取得した記事データが存在すればそれを、存在しなければダミー記事をarticleToRenderに格納
-  // ダミーデータを削除してもいいかもしれませんが、Supabaseからのデータ取得に失敗した場合などに備え、現状は残しておくのが無難かと思いました。
+  // numericId(URLから取得した記事ID)を使って、Supabaseから記事データを取得
+  const { data: article } = await supabase.from("posts").select("*").eq("id", numericId).maybeSingle();
+
+  // 取得した記事データが存在すればそれを、存在しなければnotFound()を返す
   // テーブルデータにauthorIconUrlがなかったため、ここでは省略。BlogCardのpropsを削除するか、テーブルデータにauthorIconUrlを追加するか要確認。
-  const articleToRender = article
-    ? { title: article.title, content: article.content, imageUrl: article.image_path }
-    : dummyArticle;
+  if (!article) {
+    notFound();
+  }
 
   return (
     <main className={styles.main}>
       {/* 1. 記事詳細エリア */}
       <section className={styles.section}>
-        <BlogCard
-          title={articleToRender.title}
-          content={articleToRender.content}
-          imageUrl={articleToRender.imageUrl}
-        />
+        <BlogCard title={article.title} content={article.content} imageUrl={article.image_path} />
       </section>
 
       {/* 2. コメントエリア */}
