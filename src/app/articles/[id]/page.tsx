@@ -35,7 +35,20 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   }
 
   // numericId(URLから取得した記事ID)を使って、Supabaseから記事データを取得
-  const { data: article } = await supabase.from("posts").select("*").eq("id", numericId).maybeSingle();
+  const { data: article } = await supabase
+    .from("posts")
+    .select(
+      `
+    title,
+    content,
+    image_path,
+    users(
+      image_path
+      )
+    `,
+    )
+    .eq("id", numericId)
+    .maybeSingle();
 
   // 取得した記事データが存在すればそれを、存在しなければnotFound()を返す
   // テーブルデータにauthorIconUrlがなかったため、ここでは省略。BlogCardのpropsを削除するか、テーブルデータにauthorIconUrlを追加するか要確認。
@@ -47,7 +60,12 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     <main className={styles.main}>
       {/* 1. 記事詳細エリア */}
       <section className={styles.section}>
-        <BlogCard title={article.title} content={article.content} imageUrl={article.image_path} />
+        <BlogCard
+          title={article.title}
+          content={article.content}
+          imageUrl={article.image_path}
+          authorIconUrl={article.users.image_path}
+        />
       </section>
 
       {/* 2. コメントエリア */}
