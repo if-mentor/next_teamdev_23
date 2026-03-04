@@ -8,10 +8,7 @@ type SelectProps = {
   options?: string[];
 };
 
-export default function Select({
-  label = "カテゴリ",
-  options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"],
-}: SelectProps) {
+export default function Select({ label = "カテゴリ", options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"] }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,19 +36,15 @@ export default function Select({
           aria-expanded={isOpen}
           aria-haspopup="listbox"
         >
-          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>
-            {displayText}
+          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>{displayText}</span>
+          <span className={styles.arrow} aria-hidden>
+            {isOpen ? "▲" : "▼"}
           </span>
-          <span className={styles.arrow} aria-hidden>{isOpen ? "▲" : "▼"}</span>
         </button>
       </label>
 
       {isOpen && (
-        <ul
-          className={styles.optionsPanel}
-          role="listbox"
-          aria-label={label}
-        >
+        <ul className={styles.optionsPanel} role="listbox" aria-label={label}>
           <li
             role="option"
             className={`${styles.option} ${selectedValue === "" ? styles.optionSelected : ""}`}

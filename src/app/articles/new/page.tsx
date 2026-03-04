@@ -10,11 +10,7 @@ export default function ArticleNewPage() {
 
       {/* タイトル */}
       <div className={styles.section}>
-        <input
-          type="text"
-          placeholder="タイトルを入力"
-          className={styles.input}
-        />
+        <input type="text" placeholder="タイトルを入力" className={styles.input} />
       </div>
 
       {/* 画像 */}
