@@ -51,7 +51,6 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     .maybeSingle();
 
   // 取得した記事データが存在すればそれを、存在しなければnotFound()を返す
-  // テーブルデータにauthorIconUrlがなかったため、ここでは省略。BlogCardのpropsを削除するか、テーブルデータにauthorIconUrlを追加するか要確認。
   if (!article) {
     notFound();
   }
