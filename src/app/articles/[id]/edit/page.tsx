@@ -9,10 +9,10 @@ export default async function EditPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams?: { error?: string };
+  searchParams: Promise<{ error?: string }>;
 }) {
   const { id } = await params;
-  const errorMessage = searchParams?.error;
+  const { error: errorMessage } = await searchParams;
 
   const supabase = await createClient();
   const postId = Number(id);
