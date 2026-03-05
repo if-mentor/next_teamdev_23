@@ -1,53 +1,36 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import ImagePreview from "@/component/ImagePreview";
 import styles from "./style.module.css";
+import { updatePost } from "./actions";
 
-export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams?: { error?: string };
+}) {
   const { id } = await params;
+  const errorMessage = searchParams?.error;
 
   const supabase = await createClient();
   const postId = Number(id);
 
   if (isNaN(postId)) notFound();
 
-  const { data: post, error } = await supabase.from("posts").select("*").eq("id", postId).single();
+  const { data: post, error: postError } = await supabase.from("posts").select("*").eq("id", postId).single();
 
-  console.log("post:", post);
-  console.log("error:", error);
-
-  if (!post || error) notFound();
+  if (!post || postError) notFound();
 
   const { data: categories } = await supabase.from("categories").select("*").order("id", { ascending: true });
-
-  async function updatePost(formData: FormData) {
-    "use server";
-
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const categoryId = Number(formData.get("category_id"));
-    const imagePath = formData.get("image_path") as string;
-
-    const supabase = await createClient();
-
-    await supabase
-      .from("posts")
-      .update({
-        title,
-        content,
-        category_id: categoryId,
-        image_path: imagePath,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", postId);
-
-    redirect(`/articles/${postId}`);
-  }
 
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
-        <form action={updatePost} className={styles.form}>
+        <form action={updatePost.bind(null, postId)} className={styles.form}>
+          {errorMessage && <p style={{ color: "red", fontSize: "14px" }}>{decodeURIComponent(errorMessage)}</p>}
+
           {/* タイトル */}
           <input
             type="text"
