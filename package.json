@@ -9,13 +9,17 @@
     "lint": "eslint",
     "check": "npx prettier --check \"src/**/*.{css,js,ts,jsx,tsx}\"",
     "format": "npx prettier --write \"src/**/*.{css,js,ts,jsx,tsx}\"",
-    "prepare": "husky"
+    "prepare": "simple-git-hooks"
   },
   "lint-staged": {
     "*.{css,js,ts,jsx,tsx}": [
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged",
+    "pre-push": "npm run lint"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -30,9 +34,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
-    "husky": "^9",
     "lint-staged": "^15",
     "prettier": "3.8.1",
+    "simple-git-hooks": "^2.12.0",
     "typescript": "^5"
   }
 }
