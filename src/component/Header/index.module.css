@@ -18,6 +18,15 @@
   cursor: pointer;
   background-color: transparent;
   color: #333333;
+
+  /* Linkとbuttonの見た目を揃える */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  line-height: 1;
 }
 
 .buttonPrimary {
