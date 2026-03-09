@@ -56,8 +56,8 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     .eq("post_id", numericId)
     .order("created_at", { ascending: false }); // コメントを新しい順に並べる
 
-  if(error) {
-    throw new Error("コメントの取得に失敗しました")
+  if (error) {
+    throw new Error("コメントの取得に失敗しました");
   }
 
   return (

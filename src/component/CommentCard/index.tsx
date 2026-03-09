@@ -11,12 +11,7 @@ const CommentCard = ({ username, timeAgo, content, iconUrl }: CommentCardProps) 
       {/* Next.jsのImageコンポーネントはwidthとheightを指定する必要がある */}
       {/* Next.jsは初期状態で、外部画像を読み込んでリサイズなどの最適化を行う場合、next.config.jsでドメインを許可する必要があるためnext.config.jsを更新 */}
       <div className={styles.icon}>
-        <Image
-          src={iconUrl || defaultIconUrl}
-          alt={`${username}のアイコン`}
-          width={24}
-          height={24}
-        />
+        <Image src={iconUrl || defaultIconUrl} alt={`${username}のアイコン`} width={24} height={24} />
       </div>
       <div>
         <div className={styles.header}>

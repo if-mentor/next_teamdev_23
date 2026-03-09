@@ -1,4 +1,3 @@
-
 // 記事の投稿日から現在までの経過時間で表示する　例：5分前、2時間前、3日前など
 export function formatTimeAgo(dateString: string): string {
   const date = new Date(dateString);
