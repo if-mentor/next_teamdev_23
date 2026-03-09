@@ -13,7 +13,6 @@ export async function updatePost(postId: number, formData: FormData) {
     redirect(`/articles/${postId}/edit?error=${encodeURIComponent(message)}`);
   };
 
-  // バリデーション
   if (!title?.trim()) {
     redirectWithError("タイトルを入力してください");
   }
@@ -31,6 +30,28 @@ export async function updatePost(postId: number, formData: FormData) {
   }
 
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirectWithError("ログインが必要です");
+    return;
+  }
+
+  const { data: post, error: postError } = await supabase.from("posts").select("user_id").eq("id", postId).single();
+
+  if (!post || postError) {
+    redirectWithError("記事が見つかりません");
+    return;
+  }
+
+  // 記事作成者本人のみ更新可能
+  if (post.user_id !== user.id) {
+    redirectWithError("この記事を更新する権限がありません");
+    return;
+  }
 
   const { error: updateError } = await supabase
     .from("posts")
