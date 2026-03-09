@@ -1,20 +1,80 @@
 .container {
+  position: relative;
   width: 240px;
-  height: 57px;
 }
 
 .label {
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  color: rgba(30, 30, 30, 1);
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.select {
+.trigger {
   width: 100%;
   height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 0 8px;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid rgba(216, 216, 216, 1);
+  border-radius: 8px;
   background: #fff;
+  box-shadow: none;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  color: inherit;
+}
+
+.triggerText {
+  color: rgba(0, 0, 0, 0.33);
+}
+
+.triggerTextSelected {
+  color: rgba(30, 30, 30, 1);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid rgba(30, 136, 229, 1);
+  outline-offset: 2px;
+}
+
+.arrow {
+  font-size: 10px;
+  color: #666;
+}
+
+.optionsPanel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 0;
+  margin-top: 4px;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  min-height: 158px;
+  max-height: 158px;
+  overflow-y: auto;
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+  z-index: 10;
+}
+
+.option {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.option:hover,
+.optionSelected {
+  background: rgba(0, 0, 0, 0.06);
 }

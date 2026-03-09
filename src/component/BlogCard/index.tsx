@@ -4,7 +4,7 @@ type Props = {
   title: string;
   imageUrl?: string;
   content: string;
-  authorIconUrl?: string;
+  authorIconUrl?: string | null;
 };
 
 const BlogCard = ({ title, imageUrl, content, authorIconUrl }: Props) => {
