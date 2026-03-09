@@ -50,13 +50,17 @@ export async function signup(prevState: SignupState, formData: FormData): Promis
   }
 
   if (authData.user) {
-    const { error: dbError } = await supabase.from("users").insert([
-      {
-        id: authData.user.id,
-        name: name,
-        email: email,
-      },
-    ]);
+    // auth.users.id を public.users.id として保存し、comments 等の FK を満たす
+    const { error: dbError } = await supabase.from("users").upsert(
+      [
+        {
+          id: authData.user.id,
+          name: name,
+          email: email,
+        },
+      ],
+      { onConflict: "id" },
+    );
 
     if (dbError) {
       return { error: "ユーザー情報の保存に失敗しました" };

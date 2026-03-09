@@ -28,6 +28,13 @@ export async function login(prevState: ActionState | null, formData: FormData) {
     }
   }
 
-  // 認証成功時はトップページへ
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) {
+    const name = (user.user_metadata?.name as string) ?? user.email?.split("@")[0] ?? "ユーザー";
+    await supabase.from("users").upsert([{ id: user.id, email: user.email ?? "", name }], { onConflict: "id" });
+  }
+
   redirect("/");
 }

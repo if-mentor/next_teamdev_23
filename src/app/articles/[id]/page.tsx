@@ -5,23 +5,19 @@ import styles from "./page.module.css";
 import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 
-// ダミーコメントデータ
-const dummyComments = [
-  {
-    id: 1,
-    userName: "Dummy1",
-    timeAgo: "1時間前",
-    content: "朝食はパン派です！ライ麦パン食べたくなりました🍞",
-    iconUrl: "https://placehold.jp/32x32.png", // 仮のアイコン
-  },
-  {
-    id: 2,
-    userName: "Dummy2",
-    timeAgo: "2時間前",
-    content: "初めて知りました。植物の生存戦略すごい。",
-    iconUrl: "https://placehold.jp/32x32.png", // 仮のアイコン
-  },
-];
+function formatTimeAgo(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+  if (diffMin < 1) return "たった今";
+  if (diffMin < 60) return `${diffMin}分前`;
+  if (diffHour < 24) return `${diffHour}時間前`;
+  if (diffDay < 7) return `${diffDay}日前`;
+  return date.toLocaleDateString("ja-JP");
+}
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // URLから記事IDを取得
@@ -50,10 +46,24 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     .eq("id", numericId)
     .maybeSingle();
 
-  // 取得した記事データが存在すればそれを、存在しなければnotFound()を返す
   if (!article) {
     notFound();
   }
+
+  const { data: comments } = await supabase
+    .from("comments")
+    .select(
+      `
+      id,
+      content,
+      created_at,
+      users(name)
+    `,
+    )
+    .eq("post_id", numericId)
+    .order("created_at", { ascending: true });
+
+  const commentList = comments ?? [];
 
   return (
     <main className={styles.main}>
@@ -69,24 +79,19 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
       {/* 2. コメントエリア */}
       <section className={styles.section}>
-        {/* 件数表示 */}
-        <h2 className={styles.commentHeading}>{dummyComments.length}件のコメント</h2>
+        <h2 className={styles.commentHeading}>{commentList.length}件のコメント</h2>
 
-        {/* コメント投稿フォーム */}
         <div className={styles.formWrapper}>
-          <CommentForm />
+          <CommentForm key={commentList.length} postId={numericId} />
         </div>
 
-        {/* コメント一覧 */}
         <div className={styles.commentList}>
-          {dummyComments.map((comment) => (
+          {commentList.map((comment) => (
             <CommentCard
               key={comment.id}
-              username={comment.userName}
-              timeAgo={comment.timeAgo}
+              username={(comment.users as { name: string } | null)?.name ?? "ユーザー"}
+              timeAgo={formatTimeAgo(comment.created_at)}
               content={comment.content}
-              // 将来CommentCardが対応したらiconUrlを渡す
-              // iconUrl={comment.iconUrl}
             />
           ))}
         </div>
