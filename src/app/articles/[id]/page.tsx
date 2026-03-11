@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import { formatTimeAgo } from "@/utils/date";
+import DeleteButton from "@/app/articles/[id]/edit/DeleteButton";
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // URLから記事IDを取得
