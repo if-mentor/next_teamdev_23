@@ -80,7 +80,7 @@ const ImagePreview = () => {
           </>
         )}
 
-        <input ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} hidden />
+        <input ref={inputRef} type="file" name="image" accept="image/*" onChange={handleFileChange} hidden />
       </div>
     </div>
   );
