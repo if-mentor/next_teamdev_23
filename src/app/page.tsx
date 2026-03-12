@@ -13,7 +13,7 @@ export default async function Home({
 }) {
   const supabase = await createClient();
 
-  const { page } = await searchParams;
+  const { page, q } = await searchParams;
 
   const parsedPage = Number(page);
   const currentPage = isNaN(parsedPage) ? 1 : Math.max(1, parsedPage);
@@ -21,11 +21,7 @@ export default async function Home({
   const from = (currentPage - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const {
-    data: posts,
-    error,
-    count,
-  } = await supabase
+  let query = supabase
     .from("posts")
     .select(
       `
@@ -35,8 +31,14 @@ export default async function Home({
     `,
       { count: "exact" },
     )
-    .order("created_at", { ascending: false })
-    .range(from, to);
+    .order("created_at", { ascending: false });
+
+  // 検索キーワード(q)があれば、titleに部分一致する条件を追加
+  if (typeof q === "string" && q.trim() !== "") {
+    query = query.ilike("title", `%${q.trim()}%`);
+  }
+
+  const { data: posts, error, count } = await query.range(from, to);
 
   if (error) {
     return <div>データの取得に失敗しました</div>;
@@ -60,6 +62,12 @@ export default async function Home({
             timeAgo={new Date(post.created_at).toLocaleString("ja-JP")}
           />
         ))}
+        {/* 検索結果が0件だった時のメッセージを追加 */}
+        {posts?.length === 0 && (
+          <div style={{ textAlign: "center", width: "100%", gridColumn: "1 / -1", padding: "2rem" }}>
+            該当する記事が見つかりませんでした。
+          </div>
+        )}
       </section>
 
       <div className={styles.paginationArea}>

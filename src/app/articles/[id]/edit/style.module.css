@@ -1,0 +1,97 @@
+.container {
+  width: 50vw;
+  padding: 40px 0;
+  margin: 0 auto;
+}
+
+.inner {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleInput {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #e6e6e6;
+}
+
+.categoryWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 33%;
+  margin-left: auto;
+}
+
+.label {
+  font-size: 8px;
+  color: #666;
+}
+
+.select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.textarea {
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: #d9d9d9;
+  font-size: 14px;
+  resize: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.submitButton {
+  width: 16%;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  background-color: #1e88e5;
+  color: white;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.deleteButton {
+  width: 120px;
+  height: 40px;
+  background-color: #ff4d4f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.deleteButton:hover {
+  opacity: 0.9;
+}
