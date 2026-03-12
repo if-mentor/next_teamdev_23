@@ -56,6 +56,8 @@
 .buttonWrapper {
   display: flex;
   justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
 }
 
 .submitButton {
@@ -69,5 +71,27 @@
 }
 
 .submitButton:hover {
+  opacity: 0.9;
+}
+
+.deleteButton {
+  width: 120px;
+  height: 40px;
+  background-color: #ff4d4f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.deleteButton:hover {
   opacity: 0.9;
 }

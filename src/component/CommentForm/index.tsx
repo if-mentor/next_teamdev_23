@@ -1,32 +1,26 @@
 "use client";
 
+import { useActionState } from "react";
+import { createComment, type CommentState } from "@/app/articles/[id]/actions";
 import styles from "./index.module.css";
-import { useState } from "react";
 
-function CommentForm() {
-  const [comment, setComment] = useState("");
+type Props = {
+  postId: number;
+};
 
-  // コメントボタンを押した時の処理
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // フォームのデフォルトの送信動作を防ぐ
-    if (!comment.trim()) return; // trimを適用した上で、コメントが空の場合は送信しない
-    console.log("コメント送信:", comment);
-    setComment("");
-  };
+const initialState: CommentState = {};
+
+export default function CommentForm({ postId }: Props) {
+  const [state, formAction, isPending] = useActionState(createComment, initialState);
 
   return (
-    <form className={styles.commentForm} onSubmit={handleSubmit}>
-      <textarea
-        className={styles.input}
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="コメントを入力"
-      />
-      <button className={styles.commentFormButton} type="submit">
-        コメント
+    <form className={styles.commentForm} action={formAction}>
+      <input type="hidden" name="post_id" value={postId} />
+      {state?.error && <p className={styles.error}>{state.error}</p>}
+      <textarea name="content" className={styles.input} placeholder="コメントを入力" required rows={3} />
+      <button className={styles.commentFormButton} type="submit" disabled={isPending}>
+        {isPending ? "送信中..." : "コメント"}
       </button>
     </form>
   );
 }
-
-export default CommentForm;

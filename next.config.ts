@@ -8,9 +8,9 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "vqtssvxalhpnxptlzrzc.supabase.co",
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default nextConfig;

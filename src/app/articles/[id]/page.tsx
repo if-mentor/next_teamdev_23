@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import { formatTimeAgo } from "@/utils/date";
+import DeleteButton from "@/app/articles/[id]/edit/DeleteButton";
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // URLから記事IDを取得
@@ -12,85 +13,74 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   const supabase = await createClient();
   const numericId = Number(id);
 
-  //isNaN()関数を使って、numericIdが有効な数値かどうかをチェック。無効な場合はnotFound()を返す。
+  // numericIdが無効なら404
   if (isNaN(numericId)) {
     notFound();
   }
 
-  // numericId(URLから取得した記事ID)を使って、Supabaseから記事データを取得
+  // 記事データ取得
   const { data: article } = await supabase
     .from("posts")
     .select(
       `
-    title,
-    content,
-    image_path,
-    users(
-      image_path
+      title,
+      content,
+      image_path,
+      users(
+        image_path
       )
     `,
     )
     .eq("id", numericId)
     .maybeSingle();
 
-  // 取得した記事データが存在すればそれを、存在しなければnotFound()を返す
   if (!article) {
     notFound();
   }
 
-  const { data: comments, error } = await supabase
+  // コメント取得
+  const { data: comments } = await supabase
     .from("comments")
     .select(
       `
       id,
-      user_id,
-      post_id,
       content,
       created_at,
-      users(
-        name,
-        image_path
-      )
+      users(name)
     `,
     )
     .eq("post_id", numericId)
-    .order("created_at", { ascending: false }); // コメントを新しい順に並べる
+    .order("created_at", { ascending: true });
 
-  if (error) {
-    throw new Error("コメントの取得に失敗しました");
-  }
+  const commentList = comments ?? [];
 
   return (
     <main className={styles.main}>
-      {/* 1. 記事詳細エリア */}
+      {/* 記事詳細 */}
       <section className={styles.section}>
         <BlogCard
           title={article.title}
           content={article.content}
           imageUrl={article.image_path}
-          authorIconUrl={article.users?.image_path || null} // アイコンURLが存在しない場合はnullを渡す
+          authorIconUrl={article.users?.image_path || null}
         />
       </section>
 
-      {/* 2. コメントエリア */}
+      {/* コメントエリア */}
       <section className={styles.section}>
-        {/* 件数表示 */}
-        <h2 className={styles.commentHeading}>{comments.length}件のコメント</h2>
+        <h2 className={styles.commentHeading}>{commentList.length}件のコメント</h2>
 
-        {/* コメント投稿フォーム */}
         <div className={styles.formWrapper}>
-          <CommentForm />
+          <CommentForm key={commentList.length} postId={numericId} />
         </div>
 
-        {/* コメント一覧 */}
         <div className={styles.commentList}>
-          {comments.map((comment) => (
+          {commentList.map((comment) => (
             <CommentCard
               key={comment.id}
-              username={comment.users?.name || "名無しユーザー"} // ユーザー名が存在しない場合は「名無しユーザー」を表示
+              username={(comment.users as { name: string } | null)?.name ?? "ユーザー"}
               timeAgo={formatTimeAgo(comment.created_at)}
               content={comment.content}
-              iconUrl={comment.users?.image_path || null} // アイコンURLが存在しない場合はnullを渡す
             />
           ))}
         </div>
