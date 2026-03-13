@@ -20,6 +20,12 @@ export default async function EditPage({
 
   if (isNaN(postId)) notFound();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) notFound();
+
   const { data: post, error: postError } = await supabase.from("posts").select("*").eq("id", postId).single();
 
   if (!post || postError) notFound();
