@@ -3,6 +3,7 @@ import styles from "./index.module.css";
 type Props = {
   label?: string;
   placeholder?: string;
+  name: string;
 };
 
 export default function Textarea(props: Props) {
@@ -14,7 +15,7 @@ export default function Textarea(props: Props) {
         </label>
       )}
 
-      <textarea id="content" className={styles.textarea} placeholder={props.placeholder} />
+      <textarea id="content" name={props.name} className={styles.textarea} placeholder={props.placeholder} />
     </div>
   );
 }
