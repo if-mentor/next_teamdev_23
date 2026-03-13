@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import ImagePreview from "@/component/ImagePreview";
 import styles from "./style.module.css";
-import { updatePost } from "./actions";
+import { updatePost, deletePost } from "./actions";
+import DeleteButton from "./DeleteButton";
 
 export default async function EditPage({
   params,
@@ -35,9 +36,10 @@ export default async function EditPage({
     <div className={styles.container}>
       <div className={styles.inner}>
         <form action={updatePost.bind(null, postId)} className={styles.form}>
+          <input type="hidden" name="id" value={postId} />
+
           {errorMessage && <p style={{ color: "red", fontSize: "14px" }}>{decodeURIComponent(errorMessage)}</p>}
 
-          {/* タイトル */}
           <input
             type="text"
             name="title"
@@ -46,13 +48,10 @@ export default async function EditPage({
             placeholder="タイトルを入力"
           />
 
-          {/* 画像アップロードUI */}
           <ImagePreview />
 
-          {/* 既存image_path保持 */}
           <input type="hidden" name="image_path" defaultValue={post.image_path ?? ""} />
 
-          {/* カテゴリ */}
           <div className={styles.categoryWrapper}>
             <label className={styles.label}>カテゴリ</label>
             <select name="category_id" defaultValue={post.category_id} className={styles.select}>
@@ -65,14 +64,14 @@ export default async function EditPage({
             </select>
           </div>
 
-          {/* 本文 */}
           <textarea name="content" defaultValue={post.content} className={styles.textarea} rows={8} />
 
-          {/* 送信ボタン */}
           <div className={styles.buttonWrapper}>
             <button type="submit" className={styles.submitButton}>
-              投稿
+              更新
             </button>
+
+            <DeleteButton formAction={deletePost.bind(null, postId)} className={styles.deleteButton} />
           </div>
         </form>
       </div>

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { login, type ActionState } from "./actions";
 import styles from "./login.module.css";
+import Link from "next/link";
 
 // フォームの初期状態
 const initialState: ActionState = {
@@ -42,7 +43,9 @@ export default function Login() {
 
           <p className={styles.register}>
             アカウントをお持ちでない方は
-            <span className={styles.registerLink}>新規登録</span>
+            <Link href="/signup" className={styles.registerLink}>
+              新規登録
+            </Link>
           </p>
         </form>
       </div>

@@ -21,7 +21,7 @@ export async function updatePost(postId: number, formData: FormData) {
 
   let publicUrl = "";
 
-  // ⭐ 画像アップロード処理
+  // 画像アップロード処理
   if (imageFile && imageFile.size > 0) {
     const fileExt = imageFile.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
@@ -50,4 +50,42 @@ export async function updatePost(postId: number, formData: FormData) {
   if (updateError) redirectWithError("記事の更新に失敗しました");
 
   redirect(`/articles/${postId}`);
+}
+
+export async function deletePost(postId: number) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect(`/articles/${postId}/edit?error=${encodeURIComponent("ログインが必要です")}`);
+  }
+
+  const { data: post, error: fetchError } = await supabase
+    .from("posts")
+    .select("id, user_id")
+    .eq("id", postId)
+    .maybeSingle();
+
+  if (fetchError) {
+    redirect(`/articles/${postId}/edit?error=${encodeURIComponent("記事の取得に失敗しました")}`);
+  }
+
+  if (!post) {
+    redirect(`/articles/${postId}/edit?error=${encodeURIComponent("記事が見つかりません")}`);
+  }
+
+  if (post.user_id !== user.id) {
+    redirect(`/articles/${postId}/edit?error=${encodeURIComponent("この記事を削除する権限がありません")}`);
+  }
+
+  const { error: deleteError } = await supabase.from("posts").delete().eq("id", postId).eq("user_id", user.id);
+
+  if (deleteError) {
+    redirect(`/articles/${postId}/edit?error=${encodeURIComponent("記事の削除に失敗しました")}`);
+  }
+
+  redirect("/");
 }
