@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 
 export default async function ArticleNewPage() {
   const supabase = await createClient();
-  
+
   // categoriesテーブルから一覧を取得
   const { data: categories } = await supabase.from("categories").select("id, name");
 
@@ -21,13 +21,7 @@ export default async function ArticleNewPage() {
 
         {/* タイトル */}
         <div className={styles.section}>
-          <input 
-            name="title" 
-            type="text" 
-            placeholder="タイトルを入力" 
-            className={styles.input} 
-            required 
-          />
+          <input name="title" type="text" placeholder="タイトルを入力" className={styles.input} required />
         </div>
 
         {/* 画像 */}
@@ -55,4 +49,3 @@ export default async function ArticleNewPage() {
     </main>
   );
 }
-

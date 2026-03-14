@@ -7,7 +7,10 @@ export async function createArticle(formData: FormData) {
   const supabase = await createClient();
 
   // 1. ユーザー認証: ログイン中か確認し、未ログインなら処理を中断
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
   if (authError || !user) {
     throw new Error("投稿するにはログインが必要です");
   }
@@ -23,19 +26,15 @@ export async function createArticle(formData: FormData) {
   // 3. 画像アップロード: ファイルがあればStorageに保存し、公開URLを取得
   if (imageFile instanceof File && imageFile.size > 0) {
     const fileName = `blog_image/${Date.now()}_${imageFile.name}`;
-    
-    const { error: storageError } = await supabase.storage
-      .from("teamdev")
-      .upload(fileName, imageFile);
+
+    const { error: storageError } = await supabase.storage.from("teamdev").upload(fileName, imageFile);
 
     if (storageError) {
       throw new Error(`画像のアップロードに失敗しました: ${storageError.message}`);
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from("teamdev")
-      .getPublicUrl(fileName);
-      
+    const { data: publicUrlData } = supabase.storage.from("teamdev").getPublicUrl(fileName);
+
     imageUrl = publicUrlData.publicUrl;
   }
 

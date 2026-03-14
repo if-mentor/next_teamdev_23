@@ -18,9 +18,7 @@ const Card = ({
 }: CardProps) => {
   return (
     <div className={styles.card}>
-      <div className={styles.imagePlaceholder}>
-        {imagePath ? <Image src={imagePath} alt="記事画像" fill /> : ""}
-      </div>
+      <div className={styles.imagePlaceholder}>{imagePath ? <Image src={imagePath} alt="記事画像" fill /> : ""}</div>
       <div className={styles.content}>
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>

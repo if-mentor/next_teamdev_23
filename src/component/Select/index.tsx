@@ -6,13 +6,13 @@ import styles from "./styles.module.css";
 type SelectProps = {
   label?: string;
   options?: string[];
-  name: string; 
+  name: string;
 };
 
-export default function Select({ 
-  label = "カテゴリ", 
-  options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"], 
-  name 
+export default function Select({
+  label = "カテゴリ",
+  options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"],
+  name,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -33,7 +33,7 @@ export default function Select({
   return (
     <div className={styles.container} ref={containerRef}>
       <input type="hidden" name={name} value={selectedValue} />
-      
+
       <label className={styles.label}>
         {label}
         <button
@@ -43,9 +43,7 @@ export default function Select({
           aria-expanded={isOpen}
           aria-haspopup="listbox"
         >
-          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>
-            {displayText}
-          </span>
+          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>{displayText}</span>
           <span className={styles.arrow} aria-hidden>
             {isOpen ? "▲" : "▼"}
           </span>
@@ -55,7 +53,6 @@ export default function Select({
       {isOpen && (
         <ul className={styles.optionsPanel} role="listbox" aria-label={label}>
           <li
-            role="option"
             className={`${styles.option} ${selectedValue === "" ? styles.optionSelected : ""}`}
             onMouseDown={() => {
               setSelectedValue("");
@@ -67,7 +64,6 @@ export default function Select({
           {options.map((option) => (
             <li
               key={option}
-              role="option"
               className={`${styles.option} ${selectedValue === option ? styles.optionSelected : ""}`}
               onMouseDown={() => {
                 setSelectedValue(option);
