@@ -6,9 +6,14 @@ import styles from "./styles.module.css";
 type SelectProps = {
   label?: string;
   options?: string[];
+  name: string; 
 };
 
-export default function Select({ label = "カテゴリ", options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"] }: SelectProps) {
+export default function Select({ 
+  label = "カテゴリ", 
+  options = ["カテゴリ1", "カテゴリ2", "カテゴリ3"], 
+  name 
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,6 +32,8 @@ export default function Select({ label = "カテゴリ", options = ["カテゴ�
 
   return (
     <div className={styles.container} ref={containerRef}>
+      <input type="hidden" name={name} value={selectedValue} />
+      
       <label className={styles.label}>
         {label}
         <button
@@ -36,7 +43,9 @@ export default function Select({ label = "カテゴリ", options = ["カテゴ�
           aria-expanded={isOpen}
           aria-haspopup="listbox"
         >
-          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>{displayText}</span>
+          <span className={selectedValue ? styles.triggerTextSelected : styles.triggerText}>
+            {displayText}
+          </span>
           <span className={styles.arrow} aria-hidden>
             {isOpen ? "▲" : "▼"}
           </span>
