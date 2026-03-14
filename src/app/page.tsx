@@ -3,6 +3,7 @@ import SearchBar from "@/component/SearchBar";
 import Card from "@/component/Card";
 import Pagination from "@/component/Pagination";
 import { createClient } from "@/libs/supabase/server";
+import Link from "next/link";
 
 const PAGE_SIZE = 8;
 
@@ -54,13 +55,15 @@ export default async function Home({
 
       <section className={styles.grid}>
         {posts?.map((post) => (
-          <Card
-            key={post.id}
-            title={post.title}
-            category={post.categories?.name ?? ""}
-            author={post.users?.name ?? ""}
-            timeAgo={new Date(post.created_at).toLocaleString("ja-JP")}
-          />
+          <Link key={post.id} href={`/articles/${post.id}`}>
+            <Card
+              title={post.title}
+              imagePath={post.image_path}
+              category={post.categories?.name ?? ""}
+              author={post.users?.name ?? ""}
+              timeAgo={new Date(post.created_at).toLocaleString("ja-JP")}
+            />
+          </Link>
         ))}
         {/* 検索結果が0件だった時のメッセージを追加 */}
         {posts?.length === 0 && (

@@ -1,7 +1,9 @@
+import Image from "next/image";
 import styles from "./Card.module.css";
 
 interface CardProps {
   title?: string;
+  imagePath?: string;
   category?: string;
   author?: string;
   timeAgo?: string;
@@ -9,13 +11,16 @@ interface CardProps {
 
 const Card = ({
   title = "Post Title",
+  imagePath,
   category = "Category",
   author = "Author Name",
   timeAgo = "3 min ago",
 }: CardProps) => {
   return (
     <div className={styles.card}>
-      <div className={styles.imagePlaceholder}>{/* 実際はここに<img>タグが入る */}</div>
+      <div className={styles.imagePlaceholder}>
+        {imagePath ? <Image src={imagePath} alt="記事画像" fill /> : ""}
+      </div>
       <div className={styles.content}>
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>
